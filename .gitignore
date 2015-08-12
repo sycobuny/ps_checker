@@ -1,0 +1,15 @@
+# local database instance
+.db/
+
+# vendored packages - minus our submodules
+vendor/
+!vendor/postgresql-build
+!vendor/rbenv
+!vendor/ruby-build
+!vendor/pyenv
+!vendor/pgxnclient
+!vendor/pgosquery
+
+# build outputs
+ps_checker.o
+ps_checker.so

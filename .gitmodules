@@ -1,0 +1,18 @@
+[submodule "postgresql-build"]
+	path = vendor/postgresql-build
+	url = git://github.com/postgres/postgres.git
+[submodule "pyenv"]
+	path = vendor/pyenv
+	url = git://github.com/yyuu/pyenv.git
+[submodule "pgxnclient"]
+	path = vendor/pgxnclient
+	url = git://github.com/dvarrazzo/pgxnclient.git
+[submodule "vendor/rbenv"]
+	path = vendor/rbenv
+	url = git://github.com/sstephenson/rbenv.git
+[submodule "vendor/ruby-build"]
+	path = vendor/ruby-build
+	url = git://github.com/sstephenson/ruby-build.git
+[submodule "vendor/pgosquery"]
+	path = vendor/pgosquery
+	url = git://github.com/shish/pgosquery.git
