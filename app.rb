@@ -33,6 +33,31 @@ SQL = {
         ) AS data
     SQL
 
+    gendered_brackets: heredoc(<<-SQL),
+        WITH
+        data AS (
+            SELECT
+                COUNT(*),
+                (TRUNC(EXTRACT(YEAR FROM AGE(birthday)) / 10) * 10)::text || 's' AS age,
+                gender
+            FROM participants
+            GROUP BY 2, 3
+        ),
+        data_table AS (
+            SELECT DISTINCT ON (data.age) JSON_BUILD_ARRAY(
+                data.age,
+                (SELECT count FROM data d WHERE d.gender = 'M'   AND d.age = data.age),
+                (SELECT count FROM data d WHERE d.gender = 'F'   AND d.age = data.age),
+                (SELECT count FROM data d WHERE d.gender = 'O'   AND d.age = data.age),
+                (SELECT count FROM data d WHERE d.gender IS NULL AND d.age = data.age)
+            )
+            FROM data
+            ORDER BY data.age
+        )
+
+        SELECT TO_JSON(ARRAY_AGG(json_build_array)) AS json FROM data_table;
+    SQL
+
     ps_checker: heredoc(<<-SQL),
         SELECT results AS json
         FROM stats_json
@@ -81,6 +106,30 @@ JS = {
         }
     JS
 
+    gendered_brackets: heredoc(<<-JS),
+        function initializeChart() {
+            options = {
+                title:  'Participants by Age Group and Gender',
+                colors: ['#9575cd', '#33ac71', '#f00', '#0f0'],
+                hAxis:  {title: 'Age Group'},
+                vAxis:  {title: 'Count'}
+            }
+
+            data.addColumn('string', 'Age Bracket')
+            data.addColumn('number', 'Males')
+            data.addColumn('number', 'Females')
+            data.addColumn('number', 'Other')
+            data.addColumn('number', '\u2205')
+
+            chart = new google.visualization.ColumnChart(elem)
+        }
+
+        function drawChart(json) {
+            data.addRows(json)
+            chart.draw(data, options)
+        }
+    JS
+
     ps_checker: heredoc(<<-JS),
         function initializeChart() {
             options = {
@@ -118,9 +167,10 @@ JS = {
 }
 
 TITLES = {
-    raw_table:    'Example Participant Data',
-    age_brackets: 'Parsed Data',
-    ps_checker:   'PS Checker - Live System Stats',
+    raw_table:         'Example Participant Data',
+    age_brackets:      'Parsed Data',
+    gendered_brackets: 'Broken Down by Age + Gender',
+    ps_checker:        'PS Checker - Live System Stats',
 }
 
 get '/' do
@@ -170,7 +220,7 @@ __END__
         }
 
     :javascript
-        var packages = ['table', 'corechart', 'line']
+        var packages = ['table', 'bar', 'corechart', 'line']
         google.load('visualization', '1', {packages: packages})
 
         var elem, data, options, chart, api
