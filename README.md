@@ -1,7 +1,7 @@
 PS Checker
-=========
+==========
 
-Simple web-app to do live-updated generic process monitoring
+Simple web app to pull PostgreSQL JSON-formatted data into Google Chart
 
 Installation
 ------------
@@ -29,8 +29,10 @@ and a web frontend which can query the stats and display the results in a
 The build process is not written to be run without a web connection;
 similarly, the stylesheets and the majority of the JS code required to display
 the output in the browser simply references a CDN source, rather than copying
-it down locally. In short: you can't really run this very well without a web
-connection.
+it down locally. At the very least, the [Google-Chart][] [TOS][] will not
+allow for downloaded use of the code.
+
+In short: you can't really run this without a web connection.
 
 Additionally, while I've tried to make sure that everything, once compiled,
 will still show a "clean" repository, the `make` stage for fixing semantic
@@ -52,17 +54,25 @@ make clean
 Purpose
 -------
 
-It looks pretty, that's about it. The real purpose was that I wanted to learn
-a few things:
+This project can be used to demo an easy way to interact with live PostgreSQL
+data using Google Chart, via the PostgreSQL JSON/JSONB datatypes. It includes
+both a complex background worker/FDW interaction that updates real-time system
+statistics, as well as showcases a few charts that could have real-world
+analogues to actual scientific data — it is written as a "presentation" of
+sorts for colleagues at the National Institute on Aging.
+
+Along the way, I used it as an opportunity to get my feet wet in a few new
+skills as well:
 
   * How to write and compile PostgreSQL-ready C code
   * How to create and/or load a PostgreSQL background worker
   * How to work with PostgreSQL foreign data wrappers/multicorn
   * How to write a workable Makefile
 
-There aren't really many practical applications for this code; as far as
-monitoring tools, there are obviously a ridiculous number of them out there
-already, the barest of which eclipses this project's functionality entirely.
+There aren't really many practical production-level applications for this
+code; as far as monitoring tools, there are obviously a ridiculous number of
+them out there already, the barest of which eclipses this project's
+functionality entirely.
 
 Compatibility
 -------------
