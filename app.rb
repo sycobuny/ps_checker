@@ -22,6 +22,17 @@ SQL = {
         FROM participants AS p
     SQL
 
+    age_brackets: heredoc(<<-SQL),
+        SELECT TO_JSON(ARRAY_AGG(ROW_TO_JSON(data))) AS json
+        FROM (
+            SELECT
+                COUNT(*),
+                TRUNC(EXTRACT(YEAR FROM AGE(birthday)) / 10) * 10 AS bracket
+            FROM participants
+            GROUP BY 2
+        ) AS data
+    SQL
+
     ps_checker: heredoc(<<-SQL),
         SELECT results AS json
         FROM stats_json
@@ -47,6 +58,25 @@ JS = {
             ]]})
 
             data.addRows(json)
+            chart.draw(data, options)
+        }
+    JS
+
+    age_brackets: heredoc(<<-JS),
+        function initializeChart() {
+            options = {is3D:  true, title: 'Participants by Age Group'}
+
+            data.addColumn('string', 'Bracket')
+            data.addColumn('number', 'Count')
+
+            chart = new google.visualization.PieChart(elem)
+        }
+
+        function drawChart(json) {
+            data.addRows($.map(json, function(row) {return [[
+                row.bracket + 's', row.count
+            ]]}))
+
             chart.draw(data, options)
         }
     JS
@@ -88,8 +118,9 @@ JS = {
 }
 
 TITLES = {
-    raw_table:  'Example Participant Data',
-    ps_checker: 'PS Checker - Live System Stats',
+    raw_table:    'Example Participant Data',
+    age_brackets: 'Parsed Data',
+    ps_checker:   'PS Checker - Live System Stats',
 }
 
 get '/' do
