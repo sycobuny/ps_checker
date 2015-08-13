@@ -163,7 +163,7 @@ $(multicorn) : $(python) $(pgxn_patch)
 		$(pyenv) exec python bin/pgxn install 'multicorn=1.0.4'
 
 $(pgxn_patch) : vendor/pgxnclient/.git
-	sed -i '.unpatched' '128s/.*/    \\-? ([a-z][a-z0-9-]*)?/' \
+	sed -i.unpatched '128s/.*/    \\-? ([a-z][a-z0-9-]*)?/' \
 		vendor/pgxnclient/pgxnclient/utils/semver.py
 
 ##########
