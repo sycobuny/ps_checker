@@ -51,6 +51,7 @@ SQL = {
                 TRUNC(EXTRACT(YEAR FROM AGE(birthday)) / 10) * 10 AS bracket
             FROM participants
             GROUP BY 2
+            ORDER BY 2
         ) AS data
     SQL
 
