@@ -1,10 +1,10 @@
-[submodule "postgresql-build"]
+[submodule "vendor/postgresql-build"]
 	path = vendor/postgresql-build
 	url = git://github.com/postgres/postgres.git
-[submodule "pyenv"]
+[submodule "vendor/pyenv"]
 	path = vendor/pyenv
 	url = git://github.com/yyuu/pyenv.git
-[submodule "pgxnclient"]
+[submodule "vendor/pgxnclient"]
 	path = vendor/pgxnclient
 	url = git://github.com/dvarrazzo/pgxnclient.git
 [submodule "vendor/rbenv"]
