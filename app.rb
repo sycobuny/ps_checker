@@ -16,6 +16,8 @@ def heredoc(str)
     str.gsub(/^ {8}/, '')
 end
 
+PAGES = %w(raw_table age_brackets gendered_brackets ps_checker)
+
 SQL = {
     raw_table: heredoc(<<-SQL),
         SELECT TO_JSON(ARRAY_AGG(ROW_TO_JSON(p))) AS json
@@ -174,7 +176,11 @@ TITLES = {
 }
 
 get '/' do
-    redirect '/ps_checker'
+    redirect PAGES[0]
+end
+
+get %r{^/([0-9]+)$} do
+    redirect PAGES[params['captures'].first.to_i]
 end
 
 get %r{^/([a-z_]+)\.js$} do
