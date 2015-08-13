@@ -102,3 +102,4 @@ PostgreSQL license. See [LICENSE.MD][].
 [pgosquery]:    https://github.com/shish/pgosquery
 [Google-Chart]: https://developers.google.com/chart/?hl=en
 [LICENSE.md]:   LICENSE.md
+[TOS]:          https://developers.google.com/chart/terms
