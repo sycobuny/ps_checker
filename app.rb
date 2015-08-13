@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+$stdout.sync = true
+
+require 'logger'
 require 'bundler'
 Bundler.setup   :default, :development
 Bundler.require :default, :development
@@ -7,6 +10,7 @@ Bundler.require :default, :development
 set :haml, :format => :html5
 
 DB = Sequel.connect('postgres://localhost:5432/postgres')
+DB.loggers << Logger.new($stdout)
 
 get '/' do
     haml :view
