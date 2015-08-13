@@ -16,6 +16,25 @@ def heredoc(str)
     str.gsub(/^ {8}/, '')
 end
 
+def viewdef
+    view    = []
+    in_view = false
+
+    File.open('schema.sql').each do |line|
+        if line =~ /^CREATE VIEW/
+            view << line
+            in_view = true
+        elsif line =~ /^\) AS results/
+            view << line
+            in_view = false
+        elsif in_view
+            view << line
+        end
+    end
+
+    view.join
+end
+
 PAGES = %w(raw_table age_brackets gendered_brackets ps_checker)
 
 SQL = {
@@ -255,3 +274,7 @@ __END__
           %pre.text-left= @query
           %hr
           %pre.text-left= @code
+
+          - if @title =~ /PS Checker/
+            %hr
+            %pre.text-left= viewdef
