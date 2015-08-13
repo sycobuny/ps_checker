@@ -17,6 +17,11 @@ def heredoc(str)
 end
 
 SQL = {
+    raw_table: heredoc(<<-SQL),
+        SELECT TO_JSON(ARRAY_AGG(ROW_TO_JSON(p))) AS json
+        FROM participants AS p
+    SQL
+
     ps_checker: heredoc(<<-SQL),
         SELECT results AS json
         FROM stats_json
@@ -24,6 +29,28 @@ SQL = {
 }
 
 JS = {
+    raw_table: heredoc(<<-JS),
+        function initializeChart() {
+            options = {showRowNumber: false, width: '100%'}
+
+            data.addColumn('number', 'DB ID')
+            data.addColumn('string', 'ID Code')
+            data.addColumn('date',   'Birthday')
+            data.addColumn('string', 'Gender')
+
+            chart = new google.visualization.Table(elem)
+        }
+
+        function drawChart(json) {
+            json = $.map(json, function(row) {return [[
+                row.id, row.code, new Date(row.birthday), row.gender
+            ]]})
+
+            data.addRows(json)
+            chart.draw(data, options)
+        }
+    JS
+
     ps_checker: heredoc(<<-JS),
         function initializeChart() {
             options = {
@@ -61,6 +88,7 @@ JS = {
 }
 
 TITLES = {
+    raw_table:  'Example Participant Data',
     ps_checker: 'PS Checker - Live System Stats',
 }
 
@@ -103,13 +131,15 @@ __END__
     %link{:rel => :stylesheet, :href => 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'}
     %link{:rel => :stylesheet, :href => 'http://getbootstrap.com/examples/cover/cover.css'}
     :css
+        body { color: #000 }
+        h1   { color: #fff }
         #chart {
             height: 400px;
             width:  100%;
         }
 
     :javascript
-        var packages = ['corechart', 'line']
+        var packages = ['table', 'corechart', 'line']
         google.load('visualization', '1', {packages: packages})
 
         var elem, data, options, chart, api

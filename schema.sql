@@ -1,3 +1,22 @@
+CREATE TABLE participants (
+    id       SERIAL PRIMARY KEY,
+    code     TEXT NOT NULL CHECK (code   ~ '[0-9]{4}'),
+    birthday DATE NOT NULL,
+    gender   TEXT     NULL CHECK (gender ~ '(M|F|O)')
+);
+
+INSERT INTO participants (code, birthday, gender)
+SELECT
+    TO_CHAR((RANDOM() * (9999 - 1)) + 1, '0000'),
+    NOW() - ((RANDOM() * (96 - 45) + 45)::text || ' years')::interval,
+    CASE
+        WHEN FLOOR((RANDOM() * (16 - 1)) + 1)::integer % 15 = 0 THEN 'O'
+        WHEN FLOOR((RANDOM() * ( 8 - 1)) + 1)::integer %  7 = 0 THEN NULL
+        WHEN FLOOR((RANDOM() * ( 3 - 1)) + 1)::integer %  2 = 0 THEN 'F'
+        ELSE 'M'
+    END
+FROM generate_series(1, 250);
+
 CREATE EXTENSION multicorn;
 
 CREATE SERVER pgosquery_srv

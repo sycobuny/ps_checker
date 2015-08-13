@@ -72,7 +72,9 @@ skills as well:
 There aren't really many practical production-level applications for this
 code; as far as monitoring tools, there are obviously a ridiculous number of
 them out there already, the barest of which eclipses this project's
-functionality entirely.
+functionality entirely. And, as far as outputting real scientific data, the
+information in the `participants`, even if it weren't fake/generated at
+compile time, is not of any particular use.
 
 Compatibility
 -------------
